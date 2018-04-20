@@ -8,22 +8,22 @@ const {Todo} = require('./../models/todo');
 const todos = [{
   text: 'test 1'
 }, {
-  test: 'test 2'
+  text: 'test 2'
 }];
 
 
 
 beforeEach((done)=>{
   Todo.remove({}).then(()=>{
-     Todo.insertMany(todos);
+    return Todo.insertMany(todos);
 
   }).then(()=>done());
 });
 
 
-describe('Post /todos',()=>{
+describe('POST /todos',()=>{
   it('should crete a new todo',(done)=>{
-    var text = "Test to do test";
+    var text = 'Test to do test';
 
     request(app)
     .post('/todos')
@@ -36,6 +36,7 @@ describe('Post /todos',()=>{
       if(err){
         return done(err);
       }
+
       Todo.find({text}).then((todos)=>{
         expect(todos.length).toBe(1);
         expect(todos[0].text).toBe(text);
@@ -56,12 +57,12 @@ describe('Post /todos',()=>{
       if (err){
         return done(err);
       }
-    })
+
     Todo.find().then((todos)=>{
       expect(todos.length).toBe(2);
       done();
     }).catch((e)=>done(e));
-
+  });
   });
 });
 
