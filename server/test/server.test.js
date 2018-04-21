@@ -9,9 +9,12 @@ const {Todo} = require('./../models/todo');
 const todos = [{
   _id: new ObjectID(),
   text: 'test 1'
+
 }, {
   _id: new ObjectID(),
-  text: 'test 2'
+  text: 'test 2',
+  completed: true,
+  completedAt:123
 }];
 
 var id2 = new ObjectID();
@@ -154,3 +157,97 @@ describe('DELETE /todos/:id',()=>{
 
   });
 });
+
+describe('PATCH /todos/:id',()=>{
+  it ('should update the todo', (done)=>{
+    var hexId = todos[0]._id.toHexString();
+    var text = "Lord my lord";
+
+    request(app)
+      .patch(`/todos/${hexId}`)
+      .send({
+        completed: true,
+        text
+      })
+      .expect(200)
+      .expect((res) =>{
+        expect(res.body.todo.text).toBe(text);
+        expect(res.body.todo.completed).toBe(true);
+        expect(res.body.todo.completedAt).toBeA('number');
+      })
+
+      .end(done)
+
+      });
+it('should clear CompletedAt when todo not is not completed',(done)=>{
+  var hexId = todos[1]._id.toHexString();
+  var text = 'new text'
+
+  request(app)
+    .patch(`/todos/${hexId}`)
+    .send({
+      completed:false,
+      text,
+      completedAt:123
+    })
+    .expect(200)
+    .expect((res) =>{
+      expect(res.body.todo.text).toBe(text);
+      expect(res.body.todo.completed).toBe(false);
+      expect(res.body.todo.completedAt).toNotExist();
+    })
+    .end(done)
+
+})
+
+});
+
+
+
+
+
+//
+//
+//   it('should clear completedAt when todo is note compelted',(done)=>{
+//   var hexId = todos[1]._id.toHexString();
+//
+//   request(app)
+//   .patch(`/todos/${hexId}`)
+//   .expect(200)
+//   .expect((res)=>{
+//     expect(res.body.todo._id).toBe(hexId);
+//
+//   })
+//   .end((err,res)=>{
+//     if (err){
+//       return done(err);
+//     }
+//
+//   Todo.findByIdAndUpdate(hexId,{
+//     $set:{
+//       text:'update',
+//       completed:false,
+//       completedAt: null
+//     }},
+//     {new:true}).then((todo)=>{
+//
+//
+//       expect(todo.completedAt).toNotExist();
+//       expect(200);
+//       done();
+//     }).catch((e)=>done(e));
+//   });
+// });
+// });
+//
+//
+//
+//
+//
+//   //
+//   // it ('should clear completed AT when todo is note completed', ()=>{
+//   //   var hexId = todos[1]._is.HexString();
+//   //
+//   //   Todo.findByIdAndUpdate(id,{$set: })
+//   //
+//   //  });
