@@ -116,9 +116,6 @@ app.post('/users',(req,res)=>{
   });
 
 
-
-
-
   user.save().then(()=>{
     return user.generateAuthToken();
 
