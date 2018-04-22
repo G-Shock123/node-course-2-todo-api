@@ -36,7 +36,7 @@ const todos = [{
 }];
 
 
-var id2 = new ObjectID();
+//var id2 = new ObjectID();
 
 const populateTodos = (done)=>{
   Todo.remove({}).then(()=>{
@@ -51,9 +51,9 @@ const populateUsers = (done) =>{
     var userOne = new User(users[0]).save();
     var userTwo = new User(users[1]).save();
 
-    return Promise.all([userOne, userTwo]).then(()=>{
+    return Promise.all([userOne, userTwo])
 
     }).then(()=>done());
-  });
+
 };
 module.exports = {todos, populateTodos, users, populateUsers};
